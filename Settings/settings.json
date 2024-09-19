@@ -1,0 +1,16 @@
+{
+    "log_level": "debug",
+    "osc_port": {
+        "send_to_vrchat": 9000,
+        "recv_from_vrchat": 9001
+    },
+    "send_chatbox": {
+        "presets": [
+            "",
+            "OS: ${os_name}\nCPU brand: ${cpu_brand}\nGPU brand: ${gpu_brand}",
+            "CPU Usage: ${cpu_usage}%\nGPU Usage: ${gpu_usage}%\nMem Usage: ${mem_usage}%\nVRAM Usage: ${vram_usage}",
+            "Mem Usage: ${mem_usage}%\n${used_mem}/${total_mem}GB\nVRAM Usage: ${vram_usage}%\n${used_vram}/${total_vram}GB"
+        ],
+        "preset_key": "/avatar/parameters/SysinfoPreset"
+    }
+}
