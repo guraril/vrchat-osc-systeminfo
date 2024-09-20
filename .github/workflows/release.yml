@@ -1,0 +1,47 @@
+name: Publish new Release
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Release Tag"
+        required: true
+      is_prerelease:
+        description: "Set prerelease flag"
+        required: false
+        type: boolean
+        default: false
+
+env:
+  CARGO_INCREMENTAL: 0
+  RUSTFLAGS: "-D warnings"
+
+jobs:
+  build-and-upload:
+    name: Release new version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+            shared-key: "rust-cache"
+
+      - name: Build and Archive files
+        run: |
+          cargo build --release
+          zip ${{ github.event.inputs.release_tag }}.zip target/release/vrchat-osc-systeminfo README.md LICENSE SysinfoOSC.unitypackage
+
+      - name: Create new tag
+        run: |
+          git tag ${{ github.event.inputs.release_tag }}
+          git push origin ${{ github.event.inputs.release_tag }}
+
+      - name: Release new build
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.release_tag }}
+          name: Release ${{ github.event.inputs.release_tag }}
+          draft: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+          prerelease: ${{ github.event.inputs.is_prerelease }}
+          files: ${{ github.event.inputs.release_tag }}.zip
