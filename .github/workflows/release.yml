@@ -29,7 +29,8 @@ jobs:
       - name: Build and Archive files
         run: |
           cargo build --release
-          zip ${{ github.event.inputs.release_tag }}.zip target/release/vrchat-osc-systeminfo README.md LICENSE SysinfoOSC.unitypackage
+          mv target/release/vrchat-osc-systeminfo vrchat-osc-systeminfo
+          zip ${{ github.event.inputs.release_tag }}.zip vrchat-osc-systeminfo README.md LICENSE SysinfoOSC.unitypackage
 
       - name: Create new tag
         run: |
